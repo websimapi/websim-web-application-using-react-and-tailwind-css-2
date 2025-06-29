@@ -2,9 +2,10 @@ import { Fragment, jsxDEV } from "react/jsx-dev-runtime";
 import React, { useState, useEffect, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { WebsimSocket, useQuery } from "@websim/use-query";
-import { create } from "zustand";
+import { useStore } from "zustand";
+import { createStore } from "zustand/vanilla";
 const room = new WebsimSocket();
-const useStore = create((set) => ({
+const store = createStore((set) => ({
   selectedImageId: null,
   setSelectedImageId: (id) => set({ selectedImageId: id })
 }));
@@ -28,17 +29,17 @@ const timeSteps = [
 const LoadingSpinner = ({ text = "Loading..." }) => /* @__PURE__ */ jsxDEV("div", { className: "flex flex-col items-center justify-center space-y-2", children: [
   /* @__PURE__ */ jsxDEV("div", { className: "animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 34,
+    lineNumber: 35,
     columnNumber: 9
   }),
   /* @__PURE__ */ jsxDEV("p", { className: "text-gray-300", children: text }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 35,
+    lineNumber: 36,
     columnNumber: 9
   })
 ] }, void 0, true, {
   fileName: "<stdin>",
-  lineNumber: 33,
+  lineNumber: 34,
   columnNumber: 5
 });
 function BaseImageGenerator({ onGenerationComplete }) {
@@ -82,7 +83,7 @@ function BaseImageGenerator({ onGenerationComplete }) {
   return /* @__PURE__ */ jsxDEV("div", { className: "bg-gray-800 p-4 rounded-lg shadow-lg mb-8", children: [
     /* @__PURE__ */ jsxDEV("h2", { className: "text-2xl font-bold mb-4 text-white", children: "Create a New Base Image" }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 88,
+      lineNumber: 89,
       columnNumber: 13
     }, this),
     /* @__PURE__ */ jsxDEV("div", { className: "flex flex-col sm:flex-row gap-2", children: [
@@ -100,7 +101,7 @@ function BaseImageGenerator({ onGenerationComplete }) {
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 90,
+          lineNumber: 91,
           columnNumber: 17
         },
         this
@@ -113,7 +114,7 @@ function BaseImageGenerator({ onGenerationComplete }) {
           className: "bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded-md transition-colors",
           children: isLoading ? /* @__PURE__ */ jsxDEV(LoadingSpinner, { text: "Generating..." }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 103,
+            lineNumber: 104,
             columnNumber: 34
           }, this) : "Generate"
         },
@@ -121,71 +122,71 @@ function BaseImageGenerator({ onGenerationComplete }) {
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 98,
+          lineNumber: 99,
           columnNumber: 17
         },
         this
       )
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 89,
+      lineNumber: 90,
       columnNumber: 13
     }, this),
     error && /* @__PURE__ */ jsxDEV("p", { className: "text-red-400 mt-2", children: error }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 106,
+      lineNumber: 107,
       columnNumber: 23
     }, this)
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 87,
+    lineNumber: 88,
     columnNumber: 9
   }, this);
 }
 function ImageGallery() {
   const { data: images, loading } = useQuery(room.collection("base_images_v1").orderBy("created_at", "desc"));
-  const setSelectedImageId = useStore((state) => state.setSelectedImageId);
+  const setSelectedImageId = useStore(store, (state) => state.setSelectedImageId);
   if (loading && !images) return /* @__PURE__ */ jsxDEV("div", { className: "text-center", children: /* @__PURE__ */ jsxDEV(LoadingSpinner, { text: "Loading gallery..." }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 115,
+    lineNumber: 116,
     columnNumber: 65
   }, this) }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 115,
+    lineNumber: 116,
     columnNumber: 36
   }, this);
   if (!images || images.length === 0) return /* @__PURE__ */ jsxDEV("p", { className: "text-center text-gray-400", children: "No base images yet. Generate one to start!" }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 116,
+    lineNumber: 117,
     columnNumber: 48
   }, this);
   return /* @__PURE__ */ jsxDEV("div", { className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4", children: images.map((image) => /* @__PURE__ */ jsxDEV("div", { className: "cursor-pointer group relative", onClick: () => setSelectedImageId(image.id), children: [
     /* @__PURE__ */ jsxDEV("img", { src: image.image_url, alt: image.prompt, className: "w-full h-48 object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105" }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 122,
+      lineNumber: 123,
       columnNumber: 21
     }, this),
     /* @__PURE__ */ jsxDEV("div", { className: "absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg", children: /* @__PURE__ */ jsxDEV("p", { className: "text-white text-center p-2 text-sm", children: image.prompt }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 124,
+      lineNumber: 125,
       columnNumber: 25
     }, this) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 123,
+      lineNumber: 124,
       columnNumber: 21
     }, this)
   ] }, image.id, true, {
     fileName: "<stdin>",
-    lineNumber: 121,
+    lineNumber: 122,
     columnNumber: 17
   }, this)) }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 119,
+    lineNumber: 120,
     columnNumber: 9
   }, this);
 }
 function FutureImageView({ imageId }) {
-  const setSelectedImageId = useStore((state) => state.setSelectedImageId);
+  const setSelectedImageId = useStore(store, (state) => state.setSelectedImageId);
   const { data: images, loading: imageLoading } = useQuery(room.collection("base_images_v1").filter({ id: imageId }));
   const baseImage = images && images[0];
   const { data: futureImages, loading: futureImagesLoading } = useQuery(
@@ -229,23 +230,23 @@ function FutureImageView({ imageId }) {
   };
   if (imageLoading) return /* @__PURE__ */ jsxDEV("div", { className: "text-center", children: /* @__PURE__ */ jsxDEV(LoadingSpinner, { text: "Loading image..." }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 185,
+    lineNumber: 186,
     columnNumber: 59
   }, this) }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 185,
+    lineNumber: 186,
     columnNumber: 30
   }, this);
   if (!baseImage) return /* @__PURE__ */ jsxDEV("div", { className: "text-center text-red-400", children: [
     "Image not found. ",
     /* @__PURE__ */ jsxDEV("button", { onClick: () => setSelectedImageId(null), className: "underline", children: "Return to gallery." }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 186,
+      lineNumber: 187,
       columnNumber: 87
     }, this)
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 186,
+    lineNumber: 187,
     columnNumber: 28
   }, this);
   const selectedTimeLabel = timeSteps.find((t) => t.value === sliderValue)?.label;
@@ -253,25 +254,25 @@ function FutureImageView({ imageId }) {
     /* @__PURE__ */ jsxDEV("button", { onClick: () => setSelectedImageId(null), className: "mb-4 text-blue-400 hover:text-blue-300", children: [
       /* @__PURE__ */ jsxDEV("i", { className: "fas fa-arrow-left mr-2" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 192,
+        lineNumber: 193,
         columnNumber: 113
       }, this),
       "Back to Gallery"
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 192,
+      lineNumber: 193,
       columnNumber: 13
     }, this),
     /* @__PURE__ */ jsxDEV("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: [
       /* @__PURE__ */ jsxDEV("div", { children: [
         /* @__PURE__ */ jsxDEV("h3", { className: "text-xl font-bold text-white mb-2", children: "Base Image" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 195,
+          lineNumber: 196,
           columnNumber: 21
         }, this),
         /* @__PURE__ */ jsxDEV("img", { src: baseImage.image_url, alt: baseImage.prompt, className: "w-full rounded-lg shadow-lg" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 196,
+          lineNumber: 197,
           columnNumber: 21
         }, this),
         /* @__PURE__ */ jsxDEV("p", { className: "text-gray-400 mt-2 italic", children: [
@@ -280,23 +281,23 @@ function FutureImageView({ imageId }) {
           '"'
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 197,
+          lineNumber: 198,
           columnNumber: 21
         }, this),
         /* @__PURE__ */ jsxDEV("p", { className: "text-gray-300 mt-4", children: baseImage.description }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 198,
+          lineNumber: 199,
           columnNumber: 21
         }, this)
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 194,
+        lineNumber: 195,
         columnNumber: 17
       }, this),
       /* @__PURE__ */ jsxDEV("div", { className: "flex flex-col", children: [
         /* @__PURE__ */ jsxDEV("h3", { className: "text-xl font-bold text-white mb-2", children: "Future Projection" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 201,
+          lineNumber: 202,
           columnNumber: 21
         }, this),
         /* @__PURE__ */ jsxDEV("div", { className: "bg-gray-700 p-4 rounded-lg", children: [
@@ -304,12 +305,12 @@ function FutureImageView({ imageId }) {
             "Time into the future: ",
             /* @__PURE__ */ jsxDEV("span", { className: "font-bold text-blue-400", children: selectedTimeLabel }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 203,
+              lineNumber: 204,
               columnNumber: 130
             }, this)
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 203,
+            lineNumber: 204,
             columnNumber: 25
           }, this),
           /* @__PURE__ */ jsxDEV(
@@ -327,18 +328,18 @@ function FutureImageView({ imageId }) {
             false,
             {
               fileName: "<stdin>",
-              lineNumber: 204,
+              lineNumber: 205,
               columnNumber: 25
             },
             this
           ),
           /* @__PURE__ */ jsxDEV("div", { className: "flex justify-between text-xs text-gray-400 mt-1", children: timeSteps.map((step, index) => /* @__PURE__ */ jsxDEV("span", { className: "w-1/14 text-center", children: "|" }, index, false, {
             fileName: "<stdin>",
-            lineNumber: 215,
+            lineNumber: 216,
             columnNumber: 32
           }, this)) }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 213,
+            lineNumber: 214,
             columnNumber: 26
           }, this),
           /* @__PURE__ */ jsxDEV(
@@ -353,114 +354,115 @@ function FutureImageView({ imageId }) {
             false,
             {
               fileName: "<stdin>",
-              lineNumber: 218,
+              lineNumber: 219,
               columnNumber: 26
             },
             this
           )
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 202,
+          lineNumber: 203,
           columnNumber: 21
         }, this),
         /* @__PURE__ */ jsxDEV("div", { className: "mt-4 flex-grow flex items-center justify-center bg-gray-900 rounded-lg p-4 min-h-[200px]", children: [
           isGenerating && /* @__PURE__ */ jsxDEV(LoadingSpinner, { text: "The sands of time are shifting..." }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 227,
+            lineNumber: 228,
             columnNumber: 42
           }, this),
           error && /* @__PURE__ */ jsxDEV("p", { className: "text-red-400 text-center", children: error }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 228,
+            lineNumber: 229,
             columnNumber: 35
           }, this),
           futureImageResult && /* @__PURE__ */ jsxDEV("img", { src: futureImageResult.future_image_url, className: "w-full rounded-lg" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 229,
+            lineNumber: 230,
             columnNumber: 47
           }, this),
           !isGenerating && !futureImageResult && /* @__PURE__ */ jsxDEV("p", { className: "text-gray-500", children: "Your generated future image will appear here." }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 230,
+            lineNumber: 231,
             columnNumber: 65
           }, this)
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 226,
+          lineNumber: 227,
           columnNumber: 21
         }, this)
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 200,
+        lineNumber: 201,
         columnNumber: 17
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 193,
+      lineNumber: 194,
       columnNumber: 13
     }, this),
     /* @__PURE__ */ jsxDEV("div", { className: "mt-8", children: [
       /* @__PURE__ */ jsxDEV("h3", { className: "text-xl font-bold text-white mb-4", children: "History of this timeline" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 235,
+        lineNumber: 236,
         columnNumber: 18
       }, this),
       futureImagesLoading && /* @__PURE__ */ jsxDEV("p", { className: "text-gray-400", children: "Loading history..." }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 236,
+        lineNumber: 237,
         columnNumber: 42
       }, this),
       /* @__PURE__ */ jsxDEV("div", { className: "space-y-4 max-h-96 overflow-y-auto pr-2", children: [
         futureImages && futureImages.map((img) => /* @__PURE__ */ jsxDEV("div", { className: "bg-gray-700 p-3 rounded-lg flex items-start gap-4", children: [
           /* @__PURE__ */ jsxDEV("img", { src: img.future_image_url, className: "w-32 h-20 object-cover rounded" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 240,
+            lineNumber: 241,
             columnNumber: 28
           }, this),
           /* @__PURE__ */ jsxDEV("div", { children: [
             /* @__PURE__ */ jsxDEV("p", { className: "font-bold text-white", children: img.time_delta_description }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 242,
+              lineNumber: 243,
               columnNumber: 33
             }, this),
             /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-gray-300 line-clamp-2", children: img.future_prompt }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 243,
+              lineNumber: 244,
               columnNumber: 33
             }, this)
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 241,
+            lineNumber: 242,
             columnNumber: 28
           }, this)
         ] }, img.id, true, {
           fileName: "<stdin>",
-          lineNumber: 239,
+          lineNumber: 240,
           columnNumber: 25
         }, this)),
         futureImages && futureImages.length === 0 && /* @__PURE__ */ jsxDEV("p", { className: "text-gray-500", children: "No futures generated for this image yet." }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 247,
+          lineNumber: 248,
           columnNumber: 67
         }, this)
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 237,
+        lineNumber: 238,
         columnNumber: 18
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 234,
+      lineNumber: 235,
       columnNumber: 13
     }, this)
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 191,
+    lineNumber: 192,
     columnNumber: 9
   }, this);
 }
 function App() {
-  const { selectedImageId, setSelectedImageId } = useStore();
+  const selectedImageId = useStore(store, (state) => state.selectedImageId);
+  const setSelectedImageId = useStore(store, (state) => state.setSelectedImageId);
   const handleGenerationComplete = (newId) => {
     setSelectedImageId(newId);
   };
@@ -470,62 +472,62 @@ function App() {
         "Future",
         /* @__PURE__ */ jsxDEV("span", { className: "text-blue-500", children: "Vision" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 265,
+          lineNumber: 267,
           columnNumber: 105
         }, this),
         " AI"
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 265,
+        lineNumber: 267,
         columnNumber: 21
       }, this),
       /* @__PURE__ */ jsxDEV("p", { className: "mt-2 text-lg text-gray-400", children: "Generate an image and see how it transforms over millennia." }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 266,
+        lineNumber: 268,
         columnNumber: 21
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 264,
+      lineNumber: 266,
       columnNumber: 17
     }, this),
     /* @__PURE__ */ jsxDEV("main", { children: selectedImageId ? /* @__PURE__ */ jsxDEV(FutureImageView, { imageId: selectedImageId }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 271,
+      lineNumber: 273,
       columnNumber: 25
     }, this) : /* @__PURE__ */ jsxDEV(Fragment, { children: [
       /* @__PURE__ */ jsxDEV(BaseImageGenerator, { onGenerationComplete: handleGenerationComplete }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 274,
+        lineNumber: 276,
         columnNumber: 29
       }, this),
       /* @__PURE__ */ jsxDEV(ImageGallery, {}, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 275,
+        lineNumber: 277,
         columnNumber: 29
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 273,
+      lineNumber: 275,
       columnNumber: 25
     }, this) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 269,
+      lineNumber: 271,
       columnNumber: 17
     }, this)
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 263,
+    lineNumber: 265,
     columnNumber: 13
   }, this) }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 262,
+    lineNumber: 264,
     columnNumber: 9
   }, this);
 }
 const root = createRoot(document.getElementById("root"));
 root.render(/* @__PURE__ */ jsxDEV(App, {}, void 0, false, {
   fileName: "<stdin>",
-  lineNumber: 285,
+  lineNumber: 287,
   columnNumber: 13
 }));
