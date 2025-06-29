@@ -1,0 +1,56 @@
+{
+  "database": {
+    "schema": {
+      "base_images_v1": {
+        "id": {
+          "type": "uuid",
+          "primaryKey": true
+        },
+        "prompt": {
+          "type": "text"
+        },
+        "image_url": {
+          "type": "text"
+        },
+        "description": {
+          "type": "text"
+        },
+        "user_id": {
+          "type": "uuid"
+        },
+        "created_at": {
+          "type": "timestamptz"
+        }
+      },
+      "future_images_v1": {
+        "id": {
+          "type": "uuid",
+          "primaryKey": true
+        },
+        "base_image_id": {
+          "type": "uuid",
+          "foreignKey": {
+            "table": "base_images_v1",
+            "column": "id"
+          }
+        },
+        "future_image_url": {
+          "type": "text"
+        },
+        "time_delta_description": {
+          "type": "text"
+        },
+        "future_prompt": {
+          "type": "text"
+        },
+        "user_id": {
+          "type": "uuid"
+        },
+        "created_at": {
+          "type": "timestamptz"
+        }
+      }
+    }
+  }
+}
+
